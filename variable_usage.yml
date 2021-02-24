@@ -1,0 +1,16 @@
+---
+- name: Using variables in a playbook
+  hosts: all
+  vars: 
+    first_name: Violet
+    last_name: Che
+  vars_files:
+    - /home/ansible/ansible_playbooks/var_files/new_hires.yml
+    - /home/ansible/ansible_playbooks/var_files/groups.yml
+  tasks:
+    - debug: msg="My full name is {{first_name}} {{last_name}}"
+    - debug: msg="Employee name ={{employee}}"
+    - debug: msg="SSN={{SSN}}"
+    - debug: var=title
+    - debug: var=group_name
+    - debug: var=security_level

@@ -1,0 +1,10 @@
+---
+- name: Creating a file that contains the hostname of the remote host
+  hosts: all
+  tasks:
+  - copy:
+      dest: /tmp/hostname.txt
+      content: "#hostname {{ansible_nodename}}"
+      owner: root
+      group: root
+      mode: 0644

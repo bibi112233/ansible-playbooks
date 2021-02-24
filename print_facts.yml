@@ -1,0 +1,6 @@
+---
+- name: print some facts or information about the system
+  hosts: all
+  tasks: 
+    - debug: msg="{{ansible_hostname}},{{ansible_nodename}},{{ansible_default_ipv4['address']}},{{ansible_default_ipv4['macaddress']}},{{ansible_architecture}}"
+

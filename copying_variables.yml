@@ -1,0 +1,9 @@
+---
+- name: Copying variables
+  hosts: test
+  vars:
+    document_root: /var/www/html
+  tasks:
+    - name: copy local file content into the document root path
+      copy: src=/var/www/html/index.html dest={{document_root}}/index.html
+

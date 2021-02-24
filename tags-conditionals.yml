@@ -1,0 +1,20 @@
+---
+- name: Testing conditionals in Ansible
+  vars: 
+    os_type: ubuntu
+    server_type: Linux
+  hosts: all
+  tasks:
+   - block: 
+      - debug: msg="Installing a software in ubuntu"
+        when: os_type == 'ubuntu'
+      - debug: msg="Print this only if Server type is Unix"
+        when: server_type == 'unix'
+      - debug: msg="Print this only if Server type is Linux"
+        when: server_type == 'Linux'
+     tags:
+      - conditional 
+
+   - yum: name=telnet state=present
+     tags:
+      - installation

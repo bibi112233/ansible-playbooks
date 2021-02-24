@@ -1,0 +1,41 @@
+---
+- name: Install and configure tomcat
+  hosts: production
+  become: yes
+  become_user: root
+  tasks:
+    - name: Update the server
+      yum: name='*' state=latest update_cache=yes
+    - name: Install unzip
+      yum: name=unzip state=present  
+    - name: install java 1.8
+      yum: name=java-1.8.0-openjdk state=latest
+    - name: create group tomcat
+      group: name=tomcat state=present
+    - name: create user tomcat
+      user: name=tomcat state=present
+    - name: Download tomcat tar file
+      unarchive:
+        src: https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.39/bin/apache-tomcat-9.0.39.zip
+#src: https://downloads.apache.org/tomcat/tomcat-9/v9.0.39/bin/apache-tomcat-9.0.39.zip
+        dest: /opt 
+        remote_src: yes
+    - name: verify that the apache directory was created after extraction
+      stat: path=/opt/apache-tomcat-9.0.39
+      register: tomcatinstall_dir
+    - name: renaming the tomcat install directory
+      shell: mv /opt/apache-tomcat-9.0.39 /opt/tomcat
+      ignore_errors: yes
+      when: tomcatinstall_dir.stat.exists
+    - name: create /etc/profile.d/tomcat.sh file
+      copy: content="CATALINA_HOME='/opt/tomcat/'" dest=/etc/profile.d/tomcat.sh mode=0644 
+    - shell: source /etc/profile.d/tomcat.sh
+      ignore_errors: yes
+    - name: set permission on /opt/tomcat/bin/startup.sh
+      file: path=/opt/tomcat/bin/startup.sh state=file  mode=0755 owner=tomcat group=tomcat
+    - name: set permission for cartalina.sh
+      file: path=/opt/tomcat/bin/catalina.sh state=file  mode=0755 owner=tomcat group=tomcat
+    - name: run startup.sh script
+      shell: /opt/tomcat/bin/startup.sh
+    - name: include firewalld rule for tomcat http port
+      firewalld: port=8080/tcp permanent=true state=enabled  immediate=yes 

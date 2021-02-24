@@ -1,0 +1,25 @@
+---
+- name: create users
+  hosts: all
+  vars_files: 
+   - /home/ansible/ansible_playbooks/var_files/user_create.yml
+  tasks:
+   - group:
+       name: "{{item}}"    #use this u want to list the items below here
+       state: present
+     with_items:           #this iterates/loops through the list provided
+       - admin
+       - dba
+   - user:
+       name: "{{item.username}}"
+       shell: /bin/bash
+       groups: "{{item.group}}"
+       append: yes
+       create_home: yes
+       home: "/home/{{item.username}}"
+       password: "{{'password' | password_hash('sha512')}}"
+       comment: "{{item.name}}"
+     with_items:
+        - "{{users}}"      #use this when the is a separate file containing the list of items to iterate through. find the list of users in the user_create.yml file
+
+ 

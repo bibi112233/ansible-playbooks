@@ -1,0 +1,8 @@
+---
+- hosts: production
+  tasks:
+    - name: List content of /tmp
+      command: ls -ls /tmp
+      register: output_tmp
+    - debug: var=output_tmp.stdout_lines
+

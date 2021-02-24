@@ -1,0 +1,16 @@
+---
+- name: Pinting the mac address and ip address of vms
+  vars:
+    username: Violet Che
+    title: Junior Linux System Administrator
+  hosts: test
+  tasks:
+    - debug: msg="The macaddress is:{{ansible_default_ipv4['macaddress']}}"
+    - debug: msg="IP={{ansible_default_ipv4['address']}}"
+    - debug: msg="Welcome to Lolubyte Consulting INC"
+    - debug: msg="Fully qualified domain name={{ansible_fqdn}}"
+    - debug: var=username
+    - debug: var=title
+    - debug: msg="Miss {{username}} is the new {{title}}. She will work with our team to complete the Phoenix Project"
+    - debug: msg="IP address={{ansible_default_ipv4['address']}},Mac address={{ansible_default_ipv4['macaddress']}},Hostname={{ansible_hostname}},Fully qualified domain name={{ansible_fqdn}}"
+    - debug: msg="Distribution={{ansible_distribution}},Version={{ansible_distribution_major_version}}"

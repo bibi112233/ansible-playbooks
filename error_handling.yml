@@ -1,0 +1,14 @@
+---
+- name: Handling errors in ansible
+  hosts: test
+  tasks:
+    - name: Handle the errors 
+      block:
+        - name: HEY
+          debug: msg="Hey if something goes wrong, then say something"
+        - name: Welcome everybody
+          debug: msg="Welcome to the Ansible class"
+      rescue:
+        - debug: msg="Hey your code broke somewhere"
+      always: 
+        - debug: msg="This block will be executed no matter what"

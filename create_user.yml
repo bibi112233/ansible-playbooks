@@ -1,0 +1,21 @@
+---
+- name: create a user on all machines
+  hosts: all
+  tasks:
+    - name: create the user sysadmin
+      user: 
+        name: sysadmin
+        home: /home/sysadmin
+        create_home: yes
+        password: "{{'sysadmin' | password_hash('sha512')}}"
+        generate_ssh_key: yes
+        ssh_key_bits: 2048
+        ssh_key_file: .ssh/id_rsa
+        groups: wheel
+        append: yes
+    - name: append sysadmin key to the authorized_key on all servers
+      authorized_key:
+        user: sysadmin
+        state: present
+        key: "{{ lookup('file','/home/ansible/ansible_playbooks/syadmin_rsa.pub/id_rsa.pub')}}"
+        manage_dir: False

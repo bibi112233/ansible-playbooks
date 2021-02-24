@@ -1,0 +1,13 @@
+---
+- name: Testing conditional on VM facts
+  hosts: all
+  tasks:
+   - debug: msg="The Linux distribution is Redhat"
+     when: ansible_os_family == 'RedHat' 
+   - debug: msg="The Linux distribution is ubuntu"
+     when: ansible_os_family == 'ubuntu' 
+   - yum: name=nss state=present
+     when: ansible_distribution_major_version == '7' and ansible_distribution == 'CentOS'
+
+# Or you can run if version is not '7' as below
+#    when: ansible_distribution_major_version !== '7' and ansible_distribution == 'CentOS'

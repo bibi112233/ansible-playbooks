@@ -1,0 +1,12 @@
+---
+- name: Install and configure ntp client
+  hosts: all
+  become: yes
+  become_user: root
+  tasks:
+    - name: install ntp client package
+      yum: name=ntp state=present
+    - name: copy the config file over
+      copy: src=ntp.conf dest=/etc/ntp.conf
+    - name: restart the service ntp
+      service: name=ntpd state=restarted
